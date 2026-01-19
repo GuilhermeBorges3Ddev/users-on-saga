@@ -1,8 +1,14 @@
-import React, { Component } from 'react'
+import { Component } from 'react'
+
+function* getUtcToIsoAppDisplay() {
+  while (true) 
+    yield new Date().toISOString().split('T')[0];
+}
 
 class App extends Component {
   render() {
-    return <div>test</div>
+    const UTC_ITERATOR = getUtcToIsoAppDisplay();
+    return <div>{UTC_ITERATOR.next().value}</div>
   }
 }
 
