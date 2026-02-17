@@ -8,6 +8,8 @@ import rootSaga from './sagas/index.js'
 import reducers from './reducers/index.js'
 import createSagaMiddleware from 'redux-saga'
 
+import "bootstrap/dist/css/bootstrap.min.css";
+
 import App from './components/App.jsx'
 
 axios.defaults.baseURL = 'http://localhost:3004/'
@@ -18,10 +20,8 @@ const store = createStore(reducers, applyMiddleware(sagaMiddleware))
 sagaMiddleware.run(rootSaga)
 
 ReactDOM.render(
-  <React.StrictMode>
     <Provider store={store}>
       <App />
-    </Provider>
-  </React.StrictMode>,
+    </Provider>,
   document.getElementById('root')
 )
