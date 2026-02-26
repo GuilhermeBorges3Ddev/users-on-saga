@@ -8,10 +8,11 @@
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "connectToDatabase":"json-server --watch db.json --port 3004"
+    "connectToDatabase": "json-server --watch db.json --port 3004"
   },
   "dependencies": {
     "axios": "1.13.2",
+    "bootstrap": "4.2.1",
     "react": "16.5.2",
     "react-dom": "16.5.2",
     "react-redux": "5.0.7",
