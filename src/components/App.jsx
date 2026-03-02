@@ -4,7 +4,7 @@ import React, { Component } from 'react'
 import UsersList from './UsersList';
 import NewUserForm from './NewUserForm';
 
-import { getUsersRequest, createUserRequest } from '../actions/users';
+import { getUsersRequest, createUserRequest, deleteUserRequest } from '../actions/users';
 
 function* getUtcToIsoAppDisplay() {
   while (true) 
@@ -19,6 +19,9 @@ class App extends Component {
   handleSubmit = ({firstName, lastName}) => {
     this.props.createUserRequest({ firstName, lastName });
   }
+  handleDeleteUserClick = (userId) => {
+    this.props.deleteUserRequest(userId);
+  };
   render() {
     const users = this.props.users;
     const UTC_ITERATOR = getUtcToIsoAppDisplay();
@@ -33,7 +36,7 @@ class App extends Component {
             Current UTC date: {UTC_ITERATOR.next().value}
           </p>
           <NewUserForm onSubmit={this.handleSubmit} />
-          <UsersList users={users?.items} />
+          <UsersList users={users?.items} onDeleteUser={this.handleDeleteUserClick} />
         </div>
       </React.Fragment>
     )
@@ -42,6 +45,7 @@ class App extends Component {
 
 export default connect(({ users }) => ({ users }), {
   getUsersRequest,
+  deleteUserRequest,
   createUserRequest
 })(App)
 
