@@ -4,7 +4,7 @@ import React, { Component } from 'react'
 import UsersList from './UsersList';
 import NewUserForm from './NewUserForm';
 
-import { getUsersRequest } from '../actions/users';
+import { getUsersRequest, createUserRequest } from '../actions/users';
 
 function* getUtcToIsoAppDisplay() {
   while (true) 
@@ -17,7 +17,7 @@ class App extends Component {
     this.props.getUsersRequest();
   }
   handleSubmit = ({firstName, lastName}) => {
-    console.log(firstName, lastName);
+    this.props.createUserRequest({ firstName, lastName });
   }
   render() {
     const users = this.props.users;
@@ -41,6 +41,7 @@ class App extends Component {
 }
 
 export default connect(({ users }) => ({ users }), {
-  getUsersRequest
+  getUsersRequest,
+  createUserRequest
 })(App)
 
