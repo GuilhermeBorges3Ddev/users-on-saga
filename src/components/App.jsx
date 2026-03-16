@@ -1,10 +1,11 @@
 import { connect } from 'react-redux';
 import React, { Component } from 'react'
 
+import { Alert } from 'reactstrap';
 import UsersList from './UsersList';
 import NewUserForm from './NewUserForm';
 
-import { getUsersRequest, createUserRequest, deleteUserRequest } from '../actions/users';
+import { usersError, getUsersRequest, createUserRequest, deleteUserRequest } from '../actions/users';
 
 function* getUtcToIsoAppDisplay() {
   while (true) 
@@ -19,6 +20,9 @@ class App extends Component {
   handleSubmit = ({firstName, lastName}) => {
     this.props.createUserRequest({ firstName, lastName });
   }
+  handleCloseAlert = () => {
+    this.props.usersError('');
+  }
   handleDeleteUserClick = (userId) => {
     this.props.deleteUserRequest(userId);
   };
@@ -32,6 +36,9 @@ class App extends Component {
           margin: "0 auto",
           maxWidth: "600px",
         }}>
+          <Alert color="danger" isOpen={!!users.error} toggle={this.handleCloseAlert}>
+            {users.error}
+          </Alert>
           <p style={{width: "100%"}}>
             Current UTC date: {UTC_ITERATOR.next().value}
           </p>
@@ -44,6 +51,7 @@ class App extends Component {
 }
 
 export default connect(({ users }) => ({ users }), {
+  usersError,
   getUsersRequest,
   deleteUserRequest,
   createUserRequest
