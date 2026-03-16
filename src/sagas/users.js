@@ -3,6 +3,10 @@ import { takeEvery, takeLatest, call, fork, take, put } from "redux-saga/effects
 import * as api from "../api/users";
 import * as actions from "../actions/users";
 
+const loggingUserError = (error) => {
+  console.error("Logging error: ", error?.message);
+}
+
 function* getUsers() {
     try {  
         const result = yield call(api.getUsers);
@@ -10,7 +14,8 @@ function* getUsers() {
             items: result.data,
         }));
     } catch (e) {
-        console.error(e);
+        yield put(actions.usersError('Failed to fetch users'));
+        loggingUserError(e);
     }
 }
 
@@ -23,7 +28,8 @@ function* createUser(action) {
       yield call(api.createUser, { firstName: action.payload.firstName, lastName: action.payload.lastName });
       yield call(getUsers);
   } catch (e) {
-    console.error(e);
+    yield put(actions.usersError('Failed to create an user with name ' + action.payload.firstName + ' ' + action.payload.lastName));
+    loggingUserError(e);
   }
 }
 
@@ -36,7 +42,8 @@ function* deleteUser(userId) {
         yield call(api.deleteUser, userId);
         yield call(getUsers);
     } catch (e) {
-        console.error(e);
+        yield put(actions.usersError('Failed to delete an user with id ' + userId));
+        loggingUserError(e);
     }
 }
 
