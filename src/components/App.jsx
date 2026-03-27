@@ -4,8 +4,9 @@ import React, { Component } from 'react'
 import { Alert } from 'reactstrap';
 import UsersList from './UsersList';
 import NewUserForm from './NewUserForm';
+import { appStyles as styles } from './componentStyles';
 
-import { usersError, getUsersRequest, createUserRequest, deleteUserRequest } from '../actions/users';
+import { usersError, getUsersRequest, createUserRequest, editUserRequest, deleteUserRequest } from '../actions/users';
 
 function* getUtcToIsoAppDisplay() {
   while (true) 
@@ -26,24 +27,23 @@ class App extends Component {
   handleDeleteUserClick = (userId) => {
     this.props.deleteUserRequest(userId);
   };
+  handleEditUserClick = ({ userId, firstName, lastName }) => {
+    this.props.editUserRequest({ userId, firstName, lastName });
+  };
   render() {
     const users = this.props.users;
     const UTC_ITERATOR = getUtcToIsoAppDisplay();
     return (
       <React.Fragment>
-        <div style={{
-          padding: "20px",
-          margin: "0 auto",
-          maxWidth: "600px",
-        }}>
+        <div style={styles.appContainer}>
           <Alert color="danger" isOpen={!!users.error} toggle={this.handleCloseAlert}>
             {users.error}
           </Alert>
-          <p style={{width: "100%"}}>
+          <p style={styles.utcDate}>
             Current UTC date: {UTC_ITERATOR.next().value}
           </p>
           <NewUserForm onSubmit={this.handleSubmit} />
-          <UsersList users={users?.items} onDeleteUser={this.handleDeleteUserClick} />
+          <UsersList users={users?.items} onEditUser={this.handleEditUserClick} onDeleteUser={this.handleDeleteUserClick} />
         </div>
       </React.Fragment>
     )
@@ -52,6 +52,7 @@ class App extends Component {
 
 export default connect(({ users }) => ({ users }), {
   usersError,
+  editUserRequest,
   getUsersRequest,
   deleteUserRequest,
   createUserRequest

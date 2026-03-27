@@ -37,6 +37,20 @@ function* watchCreateUserRequest() {
     yield takeLatest(actions.Types.CREATE_USER_REQUEST, createUser);
 }
 
+function* editUser(action) {
+  try {
+      yield call(api.updateUser, { userId: action.payload.userId, firstName: action.payload.firstName, lastName: action.payload.lastName });
+      yield call(getUsers);
+  } catch (e) {
+    yield put(actions.usersError('Failed to edit an user with id ' + action.payload.userId));
+    loggingUserError(e);
+  }
+}
+
+function* watchEditUserRequest() {
+    yield takeLatest(actions.Types.EDIT_USER_REQUEST, editUser);
+}
+
 function* deleteUser(userId) {
     try {
         yield call(api.deleteUser, userId);
@@ -57,6 +71,7 @@ function* watchDeleteUserRequest(){
 const userSagas = [
     fork(watchGetUsersRequest),
     fork(watchCreateUserRequest),
+    fork(watchEditUserRequest),
     fork(watchDeleteUserRequest),
 ];
 
